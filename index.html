@@ -1061,20 +1061,46 @@ footer strong { color: var(--cyan); }
         </div>
       </div>
       <div class="reveal" style="transition-delay:0.15s">
-        <form class="contact-form" onsubmit="handleSubmit(event)">
+        <form 
+          class="contact-form"
+          action="https://formspree.io/f/xjgeljol"
+          method="POST"
+        >
           <div class="form-group">
             <label class="form-label">Your Name</label>
-            <input type="text" class="form-input" placeholder="John Doe" required/>
+            <input 
+              type="text" 
+              name="name"
+              class="form-input" 
+              placeholder="John Doe" 
+              required
+            />
           </div>
+      
           <div class="form-group">
             <label class="form-label">Email Address</label>
-            <input type="email" class="form-input" placeholder="john@example.com" required/>
+            <input 
+              type="email" 
+              name="email"
+              class="form-input" 
+              placeholder="john@example.com" 
+              required
+            />
           </div>
+      
           <div class="form-group">
             <label class="form-label">Message</label>
-            <textarea class="form-textarea" placeholder="Tell me about your project or opportunity..." required></textarea>
+            <textarea 
+              name="message"
+              class="form-textarea" 
+              placeholder="Tell me about your project or opportunity..." 
+              required
+            ></textarea>
           </div>
-          <button type="submit" class="form-submit">Send Message →</button>
+      
+          <button type="submit" class="form-submit">
+            Send Message →
+          </button>
         </form>
       </div>
     </div>
@@ -1171,9 +1197,17 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 function handleSubmit(e){
   e.preventDefault();
   const btn = e.target.querySelector('.form-submit');
-  btn.textContent='Message Sent! ✓';
-  btn.style.background='linear-gradient(135deg, #059669, #10b981)';
-  setTimeout(()=>{btn.textContent='Send Message →';btn.style.background='';e.target.reset();},3000);
+  const form = e.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  // Prepare email content
+  const subject = encodeURIComponent("New Contact Form Submission");
+  const body = encodeURIComponent(
+    `You have a new message from your portfolio contact form:\n\n` +
+    Object.entries(data).map(([key, value]) => `${key}: ${value}`).join('\n')
+  );
+
 }
 </script>
 </body>
